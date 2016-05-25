@@ -1,0 +1,23 @@
+g8client__dubai:
+  g8.url: 'g8.greenitglobe.com'
+  g8.login: 'your-g8-login'
+  g8.password: 'your-g8-passowrd'
+  g8.account: 'your-g8-account'
+
+vdc__%2$s:
+  g8.client.name: '%1$s'
+  maxMemoryCapacity: 2
+  maxVDiskCapacity: 10
+  maxCPUCapacity: 2
+  maxNASCapacity: 20
+  maxArchiveCapacity: 20
+  maxNetworkOptTransfer: 5
+  maxNetworkPeerTransfer: 15
+  maxNumPublicIP: 1
+
+ovc_user__user1:
+  g8.client.name: '%1$s'
+  username: '%3$s'
+  email: '%4$s'
+  vdc: '%2$s'
+  provider: '%5$s'
