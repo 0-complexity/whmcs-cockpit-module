@@ -32,31 +32,24 @@ function validate_product($vars) {
 	$username = get_external_username($_SESSION['uid']);
 	$item = $_SESSION['cart']['products'][$vars['i']];
 	// Get product details.
-	$product = localAPI('getproducts', array('pid' => $item['pid']))['products']['product'][0];
 	$name = null;
-	$name_field_id = null;
-	foreach ($product['customfields']['customfield'] as $field) {
-		if ($field['name'] === 'Name') {
-			$name_field_id = $field['id'];
-		}
-	}
-	foreach ($item['customfields'] as $id => $field_value) {
-		if ($id == $name_field_id) {
-			$name = $field_value;
-		}
-	}
+	$custom_field_name_id = DB::table('tblcustomfields')
+		->where('relid', '=', $item['pid'])
+		->where('fieldname', '=', 'Name')
+		->pluck('id');
+	$name = $item['customfields'][strval($custom_field_name_id)];
 	$product_details = DB::table('tblproducts')
-						   ->select('configoption1', 'configoption2', 'configoption3')
-						   ->where('id', '=', $item['pid'])
-						   ->get()[0];
-	$api_url = $product_details->configoption1;
-	$client_id = $product_details->configoption2;
-	$client_secret = $product_details->configoption3;
+		->select('configoption1', 'configoption2', 'configoption3')
+		->where('id', $item['pid'])
+		->get();
+	$api_url = $product_details[0]->configoption1;
+	$client_id = $product_details[0]->configoption2;
+	$client_secret = $product_details[0]->configoption3;
 	try {
 		$itsyou_online_api = new ItsYouOnlineApi($client_id, $client_secret);
 		$jwt = $itsyou_online_api->get_jwt();
 		$cockpit_api = new CockpitApi($jwt, $api_url);
-		$exists = $cockpit_api->blueprint_exists($username, $name);
+		$exists = $cockpit_api->vdc_exists($username, $name);
 		if ($exists) {
 			return array('A service with the name "' . $name . '" already exists. Please choose a different name.');
 		}

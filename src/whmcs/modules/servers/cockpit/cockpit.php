@@ -48,11 +48,11 @@ function cockpit_ConfigOptions() {
 			'Size'         => '60',
 			'Description'  => 'OAuth2 client secret',
 		), 'blueprint'     => array(
-			'FriendlyName' => 'Blueprint',
+			'FriendlyName' => 'VDC blueprint',
 			'Type'         => 'textarea',
 			'Rows'         => '20',
 			'Cols'         => '60',
-			'Description'  => 'Blueprint yaml',
+			'Description'  => 'Blueprint containing the specs of the virtual datacenter.',
 		),
 	);
 	return $configarray;

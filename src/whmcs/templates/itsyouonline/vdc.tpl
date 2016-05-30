@@ -5,7 +5,6 @@
 
     #vdc {
         width: 100%;
-        height: calc(100vh - 340px);
         outline: 0;
         border: 0;
         min-height: 350px;

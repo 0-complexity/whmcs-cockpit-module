@@ -127,6 +127,7 @@ class CockpitApi {
 
 
 	/**
+	 * Updates a blueprint with new specs for the VDC
 	 * @param $repository_name string name of the repository
 	 * @param $blueprint_name string name of the blueprint to update
 	 * @param $blueprint string content of the updated blueprint
@@ -167,13 +168,13 @@ class CockpitApi {
 	/**
 	 * Checks if a blueprint exists.
 	 * @param $repository_name string name of the repository
-	 * @param $blueprint_name string name of the blueprint
+	 * @param $vdc_name string name of virtual datacenter
 	 * @throws CockpitException In case a blueprint with this name already exists.
 	 * @return boolean true if a blueprint with specified $blueprint_name exists, else false.
 	 */
-	public function blueprint_exists($repository_name, $blueprint_name) {
-		$blueprint_name = $this->sanitize_blueprint_name($blueprint_name);
-		$url = sprintf('/ays/repository/%s/blueprint/%s', $repository_name, $blueprint_name);
+	public function vdc_exists($repository_name, $vdc_name) {
+		$vdc_name = $this->sanitize_blueprint_name($vdc_name);
+		$url = sprintf('/ays/repository/%s/service/vdc/%s', $repository_name, $vdc_name);
 		$response = $this->call($url, null, 'GET');
 		if (in_array($response->status, array(404, 200))) {
 			return $response->status === 200;
@@ -189,7 +190,7 @@ class CockpitApi {
 	 * @param $repository_name string name of the repository
 	 * @param $blueprint_name string name of the blueprint
 	 * @return array service details
-	 * @throws CockpitException in case the call failed
+	 * @throws CockpitException in case the action did not succeed
 	 */
 	public function get_service_vdc($repository_name, $blueprint_name) {
 		$blueprint_name = $this->sanitize_blueprint_name($blueprint_name);
@@ -211,10 +212,10 @@ class CockpitApi {
 	 */
 	public function delete_service_vdc($repository_name, $blueprint_name) {
 		$blueprint_name = $this->sanitize_blueprint_name($blueprint_name);
-		$url = sprintf('/ays/repository/%s/service/vdc/%s', $repository_name, $blueprint_name);
+		$url = sprintf('/ays/repository/%s/service/vdc/%s?scope=vdc', $repository_name, $blueprint_name);
 		$response = $this->call($url, null, 'DELETE');
 		if ($response->status !== 204) {
-			log_action('delete blueprint', sprintf('%s returned code %d', $url, $response->status), $response->data);
+			log_action('delete service vdc', sprintf('%s returned code %d', $url, $response->status), $response->data);
 			throw new CockpitException('Failed to delete service');
 		}
 	}

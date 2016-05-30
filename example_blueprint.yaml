@@ -4,6 +4,12 @@ g8client__dubai:
   g8.password: 'your-g8-passowrd'
   g8.account: 'your-g8-account'
 
+ovc_user__%3$s:
+  g8.client.name: '%1$s'
+  username: '%3$s'
+  email: '%4$s'
+  provider: '%5$s'
+
 vdc__%2$s:
   g8.client.name: '%1$s'
   maxMemoryCapacity: 2
@@ -14,10 +20,5 @@ vdc__%2$s:
   maxNetworkOptTransfer: 5
   maxNetworkPeerTransfer: 15
   maxNumPublicIP: 1
-
-ovc_user__user1:
-  g8.client.name: '%1$s'
-  username: '%3$s'
-  email: '%4$s'
-  vdc: '%2$s'
-  provider: '%5$s'
+  ovc_user:
+    - '%3$s'

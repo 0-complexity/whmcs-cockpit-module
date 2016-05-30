@@ -10,7 +10,7 @@ function log_action($action, $request_data, $response_data = null) {
 
 
 function strip_special_chars($input) {
-	return preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '_', $input));
+	return preg_replace('/[^A-Za-z0-9\-]/', '', str_replace(' ', '-', $input));
 }
 
 /**
