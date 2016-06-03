@@ -24,6 +24,7 @@ $ca->requireLogin();
 if ($ca->isLoggedIn()) {
 	if (isset($_GET['vdc_id'])) {
 		$ca->assign('vdc_id', $_GET['vdc_id']);
+		$ca->assign('g8_domain', $_GET['g8_domain']);
 	}
 }
 

@@ -6,6 +6,7 @@ if (!defined("WHMCS"))
 require_once 'lib/CockpitApi.php';
 require_once 'lib/ItsYouOnlineApi.php';
 require_once 'lib/Util.php';
+require_once 'lib/Spyc.php';
 
 /**
  * Define product configuration options.
@@ -94,16 +95,29 @@ function cockpit_vdc(array $vars) {
 	$api_url = $vars['configoption1'];
 	$client_id = $vars['configoption2'];
 	$client_secret = $vars['configoption3'];
+	$blueprint = $vars['configoption4'];
 	try {
+		$blueprint_yaml = spyc_load($blueprint);
+		$g8_domain = null;
+		logModuleCall('cockpit', 'blueprint yaml', $blueprint_yaml);
+		foreach ($blueprint_yaml as $key => $value) {
+			if (strrpos($key, 'g8client__', -strlen($key)) !== false) {
+				$g8_domain = $value['g8.url'];
+			}
+		}
+		logModulecall('cockpit', 'g8url test value from blueprint', $g8_domain);
+		if (!$g8_domain) {
+			throw new Exception("g8.url not found in blueprint");
+		}
 		$itsyou_online_api = new ItsYouOnlineApi($client_id, $client_secret);
 		$jwt = $itsyou_online_api->get_jwt();
 		$cockpit_api = new CockpitApi($jwt, $api_url);
 		$vdc_name = $vars['customfields']['Name'];
 		$vdc = $cockpit_api->get_service_vdc($username, $vdc_name);
-		header(sprintf('Location: vdc.php?vdc_id=%s', $vdc['instance.hrd']['vdc.id']));
+		header(sprintf('Location: vdc.php?vdc_id=%s&g8_domain=%s', $vdc['instance.hrd']['vdc.id'], $g8_domain));
 	} catch (Exception $e) {
 		log_action(__FUNCTION__, $vars, $e->getMessage());
-		header('Location: vdc.php');
+		header('Location: index.php');
 	}
 	exit();
 }
