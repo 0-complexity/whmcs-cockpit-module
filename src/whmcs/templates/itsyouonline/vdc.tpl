@@ -17,7 +17,7 @@
     }
 </style>
 <iframe id="vdc"
-        src="/whmcs/templates/itsyouonline/vdc_control/index.html?jwt={$jwt}&vdc_id={$vdc_id}&g8_domain={$g8_domain}"></iframe>
+        src="/whmcs/templates/{$template}/vdc_control/index.html?jwt={$jwt}&vdc_id={$vdc_id}&g8_domain={$g8_domain}"></iframe>
 <script>
     $(document).ready(function () {
         var poweredBy = $('.main-content').find('p');
