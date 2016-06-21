@@ -10,6 +10,6 @@ remote_ssh_port=$3
 container_name=$4
 tar -cvzf cockpit.tgz whmcs
 scp -P ${remote_ssh_port} cockpit.tgz ${remote_host}:/tmp/
-scp -P ${remote_ssh_port} docker-deploy-yves.sh ${remote_host}:/tmp/docker-deploy.sh
-ssh -p ${remote_ssh_port} -t ${remote_host} "echo $rootpassword | sudo -S -i bash /tmp/docker-deploy.sh ${container_name}"
+scp -P ${remote_ssh_port} docker-deploy-cockpit-module.sh ${remote_host}:/tmp/docker-deploy-cockpit-module.sh
+ssh -p ${remote_ssh_port} -t ${remote_host} "echo $rootpassword | sudo -S -i bash /tmp/docker-deploy-cockpit-module.sh ${container_name}"
 rm -f cockpit.tgz

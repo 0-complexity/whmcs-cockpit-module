@@ -89,6 +89,7 @@ class CockpitApi {
 		$this->create_repository($repository_name);
 		$this->create_blueprint($repository_name, $blueprint_name, $blueprint);
 		$this->execute_blueprint($repository_name, $blueprint_name);
+		$this->install_service_vdc($repository_name, $blueprint_name);
 	}
 
 	public function create_repository($repository_name) {
@@ -146,6 +147,7 @@ class CockpitApi {
 			throw new CockpitException('Failed to upgrade or downgrade service.');
 		}
 		$this->execute_blueprint($repository_name, $blueprint_name);
+		$this->install_service_vdc($repository_name, $blueprint_name);
 	}
 
 	/**
@@ -203,6 +205,22 @@ class CockpitApi {
 		return $response->data;
 	}
 
+
+	/**
+	 * Installs a vdc. Must be called after executing the blueprint.
+	 * @param $repository_name string name of the repository
+	 * @param $vdc_name string name of the blueprint
+	 * @throws CockpitException in case the action did not succeed
+	 */
+	public function install_service_vdc($repository_name, $vdc_name) {
+		$vdc_name = $this->sanitize_blueprint_name($vdc_name);
+		$url = sprintf('/ays/repository/%s/execute?action=install&instance=%s&role=vdc', $repository_name, $vdc_name);
+		$response = $this->call($url, null, 'POST');
+		if ($response->status !== 200) {
+			log_action('install service vdc', sprintf('%s returned code %d', $url, $response->status), $response->data);
+			throw new CockpitException('Failed to delete service');
+		}
+	}
 
 	/**
 	 * Deletes a virtual data center.
