@@ -76,7 +76,7 @@ function cockpit_ConfigOptions() {
  */
 function cockpit_ClientAreaCustomButtonArray(array $vars) {
 	$buttonarray = array(
-		"Control panel" => "vdc",
+		"Control Panel" => "vdc",
 	);
 	return $buttonarray;
 }
@@ -114,7 +114,7 @@ function cockpit_vdc(array $vars) {
 		$cockpit_api = new CockpitApi($jwt, $api_url);
 		$vdc_name = $vars['customfields']['Name'];
 		$vdc = $cockpit_api->get_service_vdc($username, $vdc_name);
-		header(sprintf('Location: vdc.php?vdc_id=%s&g8_domain=%s', $vdc['instance.hrd']['vdc.id'], $g8_domain));
+		header(sprintf('Location: vdc.php?vdc_id=%s&g8_domain=%s', $vdc['instance_hrd']['vdc.id'], $g8_domain));
 	} catch (Exception $e) {
 		log_action(__FUNCTION__, $vars, $e->getMessage());
 		header('Location: index.php');
